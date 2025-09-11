@@ -1,58 +1,56 @@
+# ``
 from bs4 import BeautifulSoup
 import time
 import MENU
 import LOGIN
 
+
 class info:
-    InitHeader = {"Host": "jwxt.buu.edu.cn", "Connection": "keep-alive",
-                  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 NetType/WIFI MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x63090c11) XWEB/11581 Flue"}
-    rules_page = "https://jwxt.buu.edu.cn/sm_qxxxk.aspx"
+    InitHeader = {
+        "Host": "jwxt.buu.edu.cn",
+        "Connection": "keep-alive",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 NetType/WIFI MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x63090c11) XWEB/11581 Flue",
+    }
     public_course_page_main = "https://jwxt.buu.edu.cn/xf_xsqxxxk.aspx"
 
 
 class PublicCourse:
-    def __init__(self, account):
-        self.account = account
+    def __init__(self, account: LOGIN.Account):
+        self.account: LOGIN.Account = account
         self.course_list = []
         self.num_of_selected = 0
         self.num_of_courses = 0
 
     def get_public_page(self):
-        url = info.public_course_page_main + "?xh=" + self.account.account_data["username"]
+        url = (
+            info.public_course_page_main
+            + "?xh="
+            + self.account.account_data["username"]
+            + "&xm="
+            + self.account.name
+            + "&gnmkdm=N121109"
+        ).encode("utf-8")
         header = info.InitHeader
         header["Referer"] = url
         response = self.account.session.get(url=url, headers=header)
-        time.sleep(3.5)
-        if response.url != url:
-            print('dismissing the rule')
-            response = self.read_rules(response)
-        soup = BeautifulSoup(response.text, "lxml")
-        POSTData = {
-            "ddl_ywyl": "",
-            "__EVENTTARGET": "dpkcmcGrid$txtPageSize",
-            "__VIEWSTATE": soup.find("input", type="hidden", id="__VIEWSTATE").get("value"),
-            "__VIEWSTATEGENERATOR": soup.find("input", type="hidden", id="__VIEWSTATEGENERATOR").get("value"),
-            "dpkcmcGrid$txtChoosePage": "1",
-            "dpkcmcGrid$txtPageSize": "200"
-        }
-        response = self.account.session.post(url=response.url, data=POSTData)
+        # print(response.text)
+        # time.sleep(3.5)
+        # soup = BeautifulSoup(response.text, "lxml")
+        # POSTData = {
+        #     "ddl_ywyl": "",
+        #     "__EVENTTARGET": "dpkcmcGrid$txtPageSize",
+        #     "__VIEWSTATE": soup.find("input", type="hidden", id="__VIEWSTATE").get(
+        #         "value"
+        #     ),
+        #     "__VIEWSTATEGENERATOR": soup.find(
+        #         "input", type="hidden", id="__VIEWSTATEGENERATOR"
+        #     ).get("value"),
+        #     "dpkcmcGrid$txtChoosePage": "1",
+        #     "dpkcmcGrid$txtPageSize": "200",
+        # }
+        # response = self.account.session.post(url=response.url, data=POSTData)
+        # print(response)
         print("------get_public_page success------")
-        return response
-
-    def read_rules(self, response):
-        url = info.rules_page + "?xh=" + self.account.account_data["username"]
-        header = info.InitHeader
-        header["Referer"] = url
-        time.sleep(3.5)
-        response = self.account.session.get(url=url, headers=header)
-        soup = BeautifulSoup(response.text, "lxml")
-        POSTDate = {
-            "__VIEWSTATE": soup.find("input", id="__VIEWSTATE").get("value"),
-            "__VIEWSTATEGENERATOR": soup.find("input", id="__VIEWSTATEGENERATOR").get("value"),
-            "button1": "我已认真阅读，并同意以上内容",
-            "TextBox1": 0
-        }
-        response = self.account.session.post(url=url, data=POSTDate)
         return response
 
     def get_the_message_of_page(self, response):
@@ -77,35 +75,65 @@ class PublicCourse:
         return
 
     def catch_course(self, response):
-        number = str(int(input("输入想要抢的课程编号(课程编号即为第一项序号)\n退出程序输入数字‘0’\n>>>")) + 1)
+        number = str(
+            int(
+                input(
+                    "输入想要抢的课程编号(课程编号即为第一项序号)\n退出程序输入数字‘0’\n>>>"
+                )
+            )
+            + 1
+        )
         if number == "1":
             return
-        url = info.public_course_page_main + "?xh=" + self.account.account_data["username"]
+        url = (
+            info.public_course_page_main
+            + "?xh="
+            + self.account.account_data["username"]
+        )
         soup = BeautifulSoup(response.text, "lxml")
         header = LOGIN.ZUCC.InitHeader
         POSTData = {
             "__EVENTTARGET": "dpkcmcGrid$txtPageSize",
-            "__VIEWSTATE": soup.find("input", type="hidden", id="__VIEWSTATE").get("value"),
-            "__VIEWSTATEGENERATOR": soup.find("input", type="hidden", id="__VIEWSTATEGENERATOR").get("value"),
+            "__VIEWSTATE": soup.find("input", type="hidden", id="__VIEWSTATE").get(
+                "value"
+            ),
+            "__VIEWSTATEGENERATOR": soup.find(
+                "input", type="hidden", id="__VIEWSTATEGENERATOR"
+            ).get("value"),
             "dpkcmcGrid$txtChoosePage": "1",
             "dpkcmcGrid$txtPageSize": "200",
-            "Button1": "立即提交"
+            "Button1": "立即提交",
         }
         POSTData["kcmcGrid$ctl" + number.zfill(2) + "$xk"] = "on"
         POSTData["kcmcGrid$ctl" + number.zfill(2) + "$jc"] = "on"
         while True:
             print("当前正在抢 " + self.course_list[int(number) - 2].name)
-            response = self.account.session.post(url=url,headers=header, data=POSTData)
+            response = self.account.session.post(url=url, headers=header, data=POSTData)
             if self.num_of_selected_courses(response) == (self.num_of_selected + 1):
-                print("抢课成功！" + "\t\t" + str(time.strftime('%m-%d-%H-%M-%S', time.localtime(time.time()))),flush=True)
+                print(
+                    "抢课成功！"
+                    + "\t\t"
+                    + str(time.strftime("%m-%d-%H-%M-%S", time.localtime(time.time()))),
+                    flush=True,
+                )
                 self.num_of_selected += 1
                 return
             else:
                 try:
-                    reason = "错误原因：" + BeautifulSoup(response.text, 'lxml').find('script').string.split("'")[1]
+                    reason = (
+                        "错误原因："
+                        + BeautifulSoup(response.text, "lxml")
+                        .find("script")
+                        .string.split("'")[1]
+                    )
                 except BaseException:
                     reason = "错误原因：未知或已抢课成功"
-                print(reason + "\t\t" + str(time.strftime('%m-%d-%H-%M-%S', time.localtime(time.time()))),flush=True)
+                print(
+                    reason
+                    + "\t\t"
+                    + str(time.strftime("%m-%d-%H-%M-%S", time.localtime(time.time()))),
+                    flush=True,
+                )
 
     def num_of_selected_courses(self, response):
         soup = BeautifulSoup(response.text, "lxml")
@@ -123,12 +151,7 @@ class PublicCourse:
         return number
 
     def search(self):
-        search_dic = {
-            "序号": "关键词类型",
-            "1": "课程名称",
-            "2": "教师",
-            "3": "时间"
-        }
+        search_dic = {"序号": "关键词类型", "1": "课程名称", "2": "教师", "3": "时间"}
         search_dic_menu = MENU.MENU(search_dic)
         search_dic_menu.print_list()
         n = input(">>>")
@@ -150,11 +173,7 @@ class PublicCourse:
     def run(self):
         response = self.get_public_page()
         self.get_the_message_of_page(response)
-        dic_of_public = {
-            "1": "列出所有课表",
-            "2": "按类型搜索内容",
-            "0": "退出"
-        }
+        dic_of_public = {"1": "列出所有课表", "2": "按类型搜索内容", "0": "退出"}
         dic_of_public_menu = MENU.MENU(dic_of_public)
         dic_of_public_menu.print_list()
         while True:
@@ -185,12 +204,20 @@ class PublicCourseInfo:
         self.margin = str(margin)
 
     def show_course_info(self):
-        print("课程编号:" + self.num
-              + "\t课程名称:" + self.name
-              + "\t课程代码:" + self.code
-              + "\t课程教师:" + self.teacher
-              + "\t课程时间:" + self.time
-              + "\t课程余量:" + self.margin)
+        print(
+            "课程编号:"
+            + self.num
+            + "\t课程名称:"
+            + self.name
+            + "\t课程代码:"
+            + self.code
+            + "\t课程教师:"
+            + self.teacher
+            + "\t课程时间:"
+            + self.time
+            + "\t课程余量:"
+            + self.margin
+        )
 
     def __contains__(self, item):
         if item in self:
