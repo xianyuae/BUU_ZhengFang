@@ -70,15 +70,13 @@ class Account:
         image_response = self.session.get(img_url, cookies=self.session.cookies.get_dict(),
                                           headers=ZUCC.InitHeader, stream=True)
         image = image_response.content
+        img_dir = os.getcwd() + os.sep
         try:
-            with open(os.getcwd() + "/code.jpg", "wb") as code_jpg:
-                img_dir = os.getcwd() + "/"
+            with open(img_dir + "code.jpg", "wb") as code_jpg:
                 code_jpg.write(image)
-            code_jpg.close()
-        except IOError:
-            print("IO ERROR!")
-        finally:
-            return img_dir
+        except OSError as e:
+            print(f"IO ERROR! 无法写入验证码图片: {e}")
+        return img_dir
 
     def __get_check_code_ocr(self):
         img_dir = self.__refresh_code()

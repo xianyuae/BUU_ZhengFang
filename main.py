@@ -73,16 +73,18 @@ if __name__ == "__main__":
     if os.path.exists("status.txt"):
         with open("status.txt", "r") as f:
             status = f.read()
-    if status == "" or int(status) - time.time() > 600:
+    if status == "" or time.time() - int(status) > 600:
         print("OCR预热失效,OCR预热中")
         try:
-            with open(os.getcwd() + '/code.jpg', 'r') as code_jpg:
-                img_dir = os.getcwd() + '/'
-            code_jpg.close()
-        except IOError:
-            print('IO ERROR!')
+            img_path = os.path.join(os.getcwd(), 'code.jpg')
+            if not os.path.isfile(img_path):
+                raise FileNotFoundError("warm-up image not available yet")
+            with open(img_path, 'rb'):
+                pass
+        except OSError:
+            print("OCR预热跳过（验证码图片暂不可用，登录后自动预热）")
         else:
-            OCR_CODE.run(img_dir, dir_now=img_dir)
+            OCR_CODE.run(os.getcwd(), dir_now=os.getcwd())
             print("OCR预热完成")
             with open("status.txt", "w") as f:
                 f.write(str(int(time.time())))
