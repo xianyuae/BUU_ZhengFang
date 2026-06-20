@@ -4,6 +4,10 @@ Wengine WebVPN URL 转换器
 ==================================
 北京网瑞达 Wengine SSL VPN 的 URL 加密/解密工具
 
+Copyright (c) 2026 ZYTEric
+SPDX-License-Identifier: MIT
+(本文件基于 MIT 许可证发布，详见 https://opensource.org/license/mit)
+
 算法: AES-256-CFB (segment_size=128)
 密钥: 由各高校自行配置 (BUU默认: wrdvpnisthebest!)
 用途: 将内网域名转换为 WebVPN 可访问的加密URL
@@ -20,6 +24,11 @@ Wengine WebVPN URL 转换器
   python wengine_url.py --decrypt 77726476706e69737468656265737421fdee0f9e322526557a1dc7af96
 
 依赖: pip install pycryptodome
+
+参考与致谢:
+  - BUU WebVPN URL 转换实现: https://github.com/ZYTEric/BUU-WebVPN-Convertor (MIT)
+    本文件基于 ZYTEric/BUU-WebVPN-Convertor 的 wengine_url.py
+  - 密钥捕获思路: xiaobei97/wengine-vpn-decryptor
 """
 
 import sys

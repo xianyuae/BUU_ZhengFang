@@ -1,10 +1,14 @@
-﻿BUU_ZhengFang - 北京联合大学正方教务系统抢课助手
-Copyright 2025 BUU_ZhengFang Contributors
+BUU_ZhengFang - 北京联合大学正方教务系统抢课助手
+Copyright 2026 BUU_ZhengFang Contributors
 
 This product includes software developed by:
 
   - wengine-vpn-decryptor (https://github.com/xiaobei97/wengine-vpn-decryptor)
     Used in wengine_url.py for Wengine WebVPN URL encryption/decryption.
+
+  - ZYTEric/BUU-WebVPN-Convertor (https://github.com/ZYTEric/BUU-WebVPN-Convertor)
+    MIT License. wengine_url.py 中的 BUU WebVPN URL 转换实现基于此项目。
+    Copyright (c) 2026 ZYTEric
 
   - zfgetcode OCR model data
     Provided by the original BUU_ZhengFang project authors for captcha recognition.

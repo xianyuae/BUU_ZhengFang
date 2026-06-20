@@ -57,8 +57,8 @@ def single_char_ocr(image, models, file_names):
     for i, model in enumerate(models):
         if model.shape[1] != image_array.shape[1]:
             continue
-        model_bin = (model > 128).astype(np.uint8)  # 二值化模板
-        count = calculate_diff(image_array, model_bin)
+        # 模型已在 load_models() 中预二值化，直接使用
+        count = calculate_diff(image_array, model)
         if count < min_count:
             min_count = count
             best_match = file_names[i]

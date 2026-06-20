@@ -101,7 +101,8 @@ BUU_ZhengFang/
 
 ## 第三方代码致谢
 
-- `wengine_url.py` 基于 [wengine-vpn-decryptor](https://github.com/xiaobei97/wengine-vpn-decryptor)
+- `wengine_url.py` 中的 BUU WebVPN URL 加密/解密实现基于 [ZYTEric/BUU-WebVPN-Conventor](https://github.com/ZYTEric/BUU-WebVPN-Conventor) (MIT)
+- 密钥捕获思路参考 [wengine-vpn-decryptor](https://github.com/xiaobei97/wengine-vpn-decryptor)
 - OCR 模型数据 (`zfgetcode/`) 由原项目作者提供
 
 ## 免责声明
