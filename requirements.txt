@@ -1,0 +1,11 @@
+﻿# BUU_ZhengFang 抢课助手依赖
+requests
+beautifulsoup4
+lxml
+rsa
+numpy
+Pillow
+numba
+pycryptodome
+browser-cookie3
+qrcode
