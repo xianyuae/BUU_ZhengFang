@@ -1,0 +1,10 @@
+﻿BUU_ZhengFang - 北京联合大学正方教务系统抢课助手
+Copyright 2025 BUU_ZhengFang Contributors
+
+This product includes software developed by:
+
+  - wengine-vpn-decryptor (https://github.com/xiaobei97/wengine-vpn-decryptor)
+    Used in wengine_url.py for Wengine WebVPN URL encryption/decryption.
+
+  - zfgetcode OCR model data
+    Provided by the original BUU_ZhengFang project authors for captcha recognition.
